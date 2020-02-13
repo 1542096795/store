@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- namespace 当前UserMapper接口的位置 -->
+<mapper namespace="cn.tedu.store.mapper.ICartMapper">
+    <!--   resultMap 区域—————————————————————————————————————————— -->
+    <resultMap type="cn.tedu.store.entity.Cart" id="cartMap">
+        <!-- column：查询结果中的列 -->
+        <!-- property：封装查询结果的类的属性 -->
+        <id column="cid" property="cid"/>
+        <result column="pid" property="pid"/>
+        <result column="uid" property="uid"/>
+        <result column="num" property="num"/>
+        <result column="price" property="price"/>
+        <result column="created_user" property="createdUser"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_user" property="modifiedUser"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+
+    <!--   select 区域—————————————————————————————————————————————— -->
+
+    <!--  Cart findByUidPid(@Param("uid") Integer uid,
+      @Param("pid") Integer pid);
+  -->
+    <select id="selectByUidPid" resultMap="cartMap">
+    SELECT
+            t_cart.cid,
+            t_cart.num,
+            t_cart.price
+    FROM
+            t_cart
+    WHERE
+            t_cart.pid =#{pid} AND
+            t_cart.uid =#{uid}
+    </select>
+
+    <!--
+     根据用户的uid查询用户的购物车数据
+     @param uid 用户的id
+     @return 用户的购物车数据
+      List<CartVO> selectCartsByUid(Integer uid);
+     -->
+    <select id="selectCartsByUid" resultType="cn.tedu.store.entity.vo.CartVO">
+                SELECT
+                c.pid,
+                c.cid,
+                c.uid,
+                c.num,
+                c.price AS cartPrice,
+                p.title AS title,
+                p.price AS realPrice,
+                p.image
+                FROM
+                t_cart AS c
+                INNER JOIN t_product AS p ON c.pid = p.id
+                WHERE
+                c.uid = #{uid}
+                ORDER BY
+                c.created_time DESC
+    </select>
+
+    <!-- 根据若干个cid查询购物车数据List<CartVO> selectCartsByCids(Integer cids);-->
+    <select id="selectCartsByCids" resultType="cn.tedu.store.entity.vo.CartVO">
+                SELECT
+                c.pid,
+                c.cid,
+                c.uid,
+                c.num,
+                c.price AS cartPrice,
+                p.title AS title,
+                p.price AS realPrice,
+                p.image
+                FROM
+                t_cart AS c
+                INNER JOIN t_product AS p ON c.pid = p.id
+                WHERE
+                cid IN <foreach collection="cids"
+                                item="cid" separator=","
+                                open="(" close=")"
+                       >
+                                #{cid}
+                       </foreach>
+                ORDER BY
+                c.created_time DESC
+    </select>
+    <!--  @param cid
+       @return
+       Cart selectCartsByCid(Integer cid);-->
+    <select id="selectCartByCid" resultMap="cartMap">
+                    SELECT
+                           *
+                    FROM
+                            t_cart
+                    WHERE
+                         cid=#{cid}
+    </select>
+
+
+    <!--   update 区域—————————————————————————————————————————————————————— -->
+
+    <!--    更新商品数量
+      Integer updateNum(
+              @Param("cid") Integer cid,
+              @Param("num") Integer num,
+              @Param("modifiedUser") String modifiedUser,
+              @Param("modifiedTime") Date modifiedTime
+        );-->
+    <update id="updateNum">
+    UPDATE t_cart
+    SET
+       modified_user =#{modifiedUser},num =#{num}, modified_time=#{modifiedTime}
+    WHERE  cid=#{cid}
+
+</update>
+    <!--   insert 区域—————————————————————————————————————————————————————— -->
+
+
+    <!--   插入购物车数据 Integer insertCart(Cart cart);-->
+    <insert id="insertCart">
+        INSERT  INTO t_cart(
+            pid,
+            uid,
+            num,
+            price,
+            created_user,
+            created_time,
+            modified_user,
+            modified_time
+        )VALUES (
+            #{pid},
+            #{uid},
+            #{num},
+            #{price},
+            #{createdUser},
+            #{createdTime},
+            #{modifiedUser},
+            #{modifiedTime}
+            )
+    </insert>
+
+    <!--  delete 区域  =====================================================================================  -->
+
+</mapper>
+	

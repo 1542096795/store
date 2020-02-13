@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- namespace 当前UserMapper接口的位置 -->
+<mapper namespace="cn.tedu.store.mapper.IDistrictMapper">
+    <!--   resultMap 区域—————————————————————————————————————————— -->
+    <resultMap type="cn.tedu.store.entity.District" id="districtMapper">
+        <!-- column：查询结果中的列 -->
+        <!-- property：封装查询结果的类的属性 -->
+        <id column="id" property="id"/>
+        <result column="parent" property="parent"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+    </resultMap>
+
+    <!--   select 区域—————————————————————————————————————————————— -->
+    <!--  根据父级parent查询  List<District> findByParent(String  parent);-->
+    <select id="findByParent" resultType="cn.tedu.store.entity.District">
+        <!-- column：查询结果中的列 -->
+        SELECT *
+        FROM t_dict_district
+        WHERE parent = #{parent}
+        ORDER BY id
+    </select>
+    <!--  根据code查询   District findByCode(String code);-->
+    <select id="findByCode" resultType="cn.tedu.store.entity.District">
+                  SELECT
+                            t_dict_district.id,
+                            t_dict_district.parent,
+                            t_dict_district.`code`,
+                            t_dict_district.`name`
+                  FROM
+                            t_dict_district
+                  WHERE
+                             t_dict_district.`code` = #{code}
+
+    </select>
+
+    <!--   update 区域—————————————————————————————————————————————————————— -->
+
+    <!--   insert 区域—————————————————————————————————————————————————————— -->
+
+    <!--   delete 区域—————————————————————————————————————————— -->
+
+</mapper>
+	

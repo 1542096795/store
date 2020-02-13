@@ -1,0 +1,128 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//ibatis.apache.org//DTD Mapper 3.0//EN"
+        "http://ibatis.apache.org/dtd/ibatis-3-mapper.dtd">
+
+
+<!-- namespace 当前UserMapper接口的位置 -->
+<mapper namespace="cn.tedu.store.mapper.IOrderMapper">
+    <!--   resultMap 区域—————————————————————————————————————————— -->
+    <resultMap type="cn.tedu.store.entity.Order" id="OrdertMap">
+        <!-- column：查询结果中的列 -->
+        <!-- property：封装查询结果的类的属性 -->
+        <id column="oid" property="oid"/>
+        <result column="uid" property="uid"/>
+        <result column="receiver_name" property="receiverName"/>
+        <result column="receiver_phone" property="receiverPhone"/>
+        <result column="receiver_province" property="receiverProvince"/>
+        <result column="receiver_city" property="receiverCity"/>
+        <result column="receiver_area" property="receiverArea"/>
+        <result column="receiver_address" property="receiverAddress"/>
+        <result column="total_price" property="totalPrice"/>
+        <result column="state" property="state"/>
+        <result column="order_time" property="orderTime"/>
+        <result column="pay_time" property="payTime"/>
+        <result column="pay_type" property="payType"/>
+        <result column="created_user" property="createdUser"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_user" property="modifiedUser"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <resultMap type="cn.tedu.store.entity.OrderItem" id="OrdertItemMap">
+        <!-- column：查询结果中的列 -->
+        <!-- property：封装查询结果的类的属性 -->
+        <id column="id" property="id"/>
+        <result column="pid" property="pid"/>
+        <result column="oid" property="oid"/>
+        <result column="title" property="title"/>
+        <result column="image" property="image"/>
+        <result column="price" property="price"/>
+        <result column="num" property="num"/>
+        <result column="created_user" property="createdUser"/>
+        <result column="created_time" property="createdTime"/>
+        <result column="modified_user" property="modifiedUser"/>
+        <result column="modified_time" property="modifiedTime"/>
+    </resultMap>
+
+    <!--   select 区域—————————————————————————————————————————————— -->
+
+
+    <!--   update 区域—————————————————————————————————————————————————————— -->
+
+    <!--   insert 区域—————————————————————————————————————————————————————— -->
+
+    <!--  用户下订单，向订单表添加数据
+         @param order 订单数据
+         Integer insertOrder(Order order);-->
+    <insert id="insertOrder" useGeneratedKeys="true" keyProperty="oid">
+        INSERT INTO t_order(
+                        uid,
+                        receiver_name,
+                        receiver_phone,
+                        receiver_province,
+                        receiver_city,
+                        receiver_area,
+                        receiver_address,
+                        total_price,
+                        state,
+                        order_time,
+                        pay_time,
+                        pay_type,
+                        created_user,
+                        created_time,
+                        modified_user,
+                        modified_time
+        )VALUES (
+                        #{uid},
+                        #{receiverName},
+                        #{receiverPhone},
+                        #{receiverProvince},
+                        #{receiverCity},
+                        #{receiverArea},
+                        #{receiverAddress},
+                        #{totalPrice},
+                        #{state},
+                        #{orderTime},
+                        #{payTime},
+                        #{payType},
+                        #{createdUser},
+                        #{ createdTime},
+                        #{modifiedUser},
+                        #{ modifiedTime}
+                        )
+
+    </insert>
+
+    <!--  订单中的商品列表  Integer insertOrderItem(OrderItem orderItem);-->
+    <insert id="insertOrderItem">
+        INSERT INTO t_order_item(
+                        oid,
+                        pid,
+                        title,
+                        image,
+                        price,
+                        num,
+                        created_user,
+                        created_time,
+                        modified_user,
+                        modified_time
+        )VALUES (
+                        #{oid},
+                        #{pid},
+                        #{title},
+                        #{image},
+                        #{price},
+                        #{num},
+                        #{createdUser},
+                        #{createdTime},
+                        #{modifiedUser},
+                        #{modifiedTime}
+                        )
+
+    </insert>
+
+
+    <!--  delete 区域  =====================================================================================  -->
+
+</mapper>
+	
